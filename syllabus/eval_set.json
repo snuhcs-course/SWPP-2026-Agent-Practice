@@ -1,0 +1,101 @@
+[
+  {
+    "id": "n1",
+    "kind": "normal",
+    "question": "What do we cover in week 5?",
+    "expect_contains": ["Agent"],
+    "expect_tool": "get_week_schedule",
+    "should_refuse": false
+  },
+  {
+    "id": "n2",
+    "kind": "normal",
+    "question": "When is Lab 3 due?",
+    "expect_contains": ["10-13", "October 13"],
+    "expect_tool": "get_week_schedule",
+    "should_refuse": false
+  },
+  {
+    "id": "n3",
+    "kind": "normal",
+    "question": "How much is the final exam worth?",
+    "expect_contains": ["15"],
+    "expect_tool": "get_grading_policy",
+    "should_refuse": false
+  },
+  {
+    "id": "n4",
+    "kind": "normal",
+    "question": "What happens if I hand in an assignment one day late?",
+    "expect_contains": ["10%", "10 %"],
+    "expect_tool": "get_course_policy",
+    "should_refuse": false
+  },
+  {
+    "id": "n5",
+    "kind": "normal",
+    "question": "How many absences before I fail the course?",
+    "expect_contains": ["6"],
+    "expect_tool": "get_course_policy",
+    "should_refuse": false
+  },
+  {
+    "id": "n6",
+    "kind": "normal",
+    "question": "How many people should be on a project team?",
+    "expect_contains": ["4"],
+    "expect_tool": "get_course_policy",
+    "should_refuse": false
+  },
+  {
+    "id": "n7",
+    "kind": "normal",
+    "question": "What is the TA's email address?",
+    "expect_contains": ["swpp-ta@hcs.snu.ac.kr"],
+    "expect_tool": "search_syllabus",
+    "should_refuse": false
+  },
+  {
+    "id": "a1",
+    "kind": "ambiguous",
+    "question": "When do we learn about testing?",
+    "expect_contains": ["6"],
+    "expect_tool": "search_syllabus",
+    "should_refuse": false,
+    "note": "No week number is given, so guessing week numbers with get_week_schedule is wrong; search_syllabus is the right call."
+  },
+  {
+    "id": "a2",
+    "kind": "ambiguous",
+    "question": "Can I retake this course next year?",
+    "expect_contains": ["NOT_FOUND", "not covered", "does not", "syllabus"],
+    "expect_tool": null,
+    "should_refuse": true,
+    "note": "Not in the syllabus. The agent must say so rather than invent a policy."
+  },
+  {
+    "id": "a3",
+    "kind": "ambiguous",
+    "question": "What do we do in week 20?",
+    "expect_contains": ["15", "not", "no"],
+    "expect_tool": "get_week_schedule",
+    "should_refuse": true,
+    "note": "Argument out of range. The tool returns NOT_FOUND and the model must pass that along."
+  },
+  {
+    "id": "o1",
+    "kind": "out_of_scope",
+    "question": "What is the weather in Seoul tomorrow?",
+    "expect_contains": [],
+    "expect_tool": null,
+    "should_refuse": true
+  },
+  {
+    "id": "o2",
+    "kind": "out_of_scope",
+    "question": "Write me a quicksort in Python.",
+    "expect_contains": [],
+    "expect_tool": null,
+    "should_refuse": true
+  }
+]
