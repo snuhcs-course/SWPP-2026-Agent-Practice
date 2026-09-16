@@ -2,7 +2,7 @@
   {
     "id": "n1",
     "kind": "normal",
-    "question": "What do we cover in week 5?",
+    "question": "What do we cover in week 6?",
     "expect_contains": ["Agent"],
     "expect_tool": "get_week_schedule",
     "should_refuse": false
@@ -11,15 +11,15 @@
     "id": "n2",
     "kind": "normal",
     "question": "When is Lab 3 due?",
-    "expect_contains": ["10-13", "October 13"],
+    "expect_contains": ["10-14", "October 14"],
     "expect_tool": "get_week_schedule",
     "should_refuse": false
   },
   {
     "id": "n3",
     "kind": "normal",
-    "question": "How much is the final exam worth?",
-    "expect_contains": ["15"],
+    "question": "How much is the Random Evaluation component worth?",
+    "expect_contains": ["30"],
     "expect_tool": "get_grading_policy",
     "should_refuse": false
   },
@@ -35,7 +35,7 @@
     "id": "n5",
     "kind": "normal",
     "question": "How many absences before I fail the course?",
-    "expect_contains": ["6"],
+    "expect_contains": ["one-third", "1/3", "one third"],
     "expect_tool": "get_course_policy",
     "should_refuse": false
   },
@@ -59,7 +59,7 @@
     "id": "a1",
     "kind": "ambiguous",
     "question": "When do we learn about testing?",
-    "expect_contains": ["6"],
+    "expect_contains": ["8"],
     "expect_tool": "search_syllabus",
     "should_refuse": false,
     "note": "No week number is given, so guessing week numbers with get_week_schedule is wrong; search_syllabus is the right call."

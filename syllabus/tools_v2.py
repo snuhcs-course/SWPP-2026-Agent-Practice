@@ -6,8 +6,10 @@ Four tools, each demonstrating exactly one design principle.
   get_course_policy    Principle 2. Use an enum instead of a free-form string.
   get_week_schedule    Principle 3. Validate arguments, and write the failure message
                                     as a prompt - the model is the one who reads it.
+                                    TODO - Exercise 4.
   search_syllabus      Principle 4. Keep exactly one fallback, and return "nothing found"
                                     explicitly.
+                                    TODO - Exercise 4.
 
 The fifth principle is not in the code:
 
@@ -68,11 +70,11 @@ def get_week_schedule(week: int) -> dict | str:
     covered or due in a given week. `week` must be an integer from 1 to 15.
     For questions that are not tied to a week number, use search_syllabus instead.
     """
-    if not isinstance(week, int) or not (MIN_WEEK <= week <= MAX_WEEK):
-        return (
-            f"NOT_FOUND: week must be an integer between {MIN_WEEK} and {MAX_WEEK}, got {week!r}. "
-            f"If the student did not mention a week number, call search_syllabus instead."
-        )
+    # TODO (Exercise 4, principle 3): validate `week` BEFORE searching, and return
+    # a NOT_FOUND message that says what was wrong, what is valid, and what to do
+    # next (e.g. "call search_syllabus instead"). Without this, an out-of-range or
+    # wrong-type `week` silently falls through to the generic message below, which
+    # tells the model neither the valid range nor what to try next.
     for row in SCHEDULE:
         if row["week"] == week:
             return row
@@ -109,11 +111,9 @@ def search_syllabus(
             if kw in key.lower() or kw in str(value).lower():
                 hits.append({key: value})
 
-    if not hits:
-        return (
-            f"NOT_FOUND: no entry in section '{section}' matches '{keyword}'. "
-            f"The syllabus does not cover this. Tell the student it is not in the syllabus."
-        )
+    # TODO (Exercise 4, principle 4): an empty `hits` needs an explicit NOT_FOUND
+    # string - [] does not read as "no results" to a model, which then risks
+    # answering as if it found something.
     return hits[:5]
 
 

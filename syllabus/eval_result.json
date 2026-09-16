@@ -1,0 +1,250 @@
+{
+  "v1": [
+    {
+      "id": "n1",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n2",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n3",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n4",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n5",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n6",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n7",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "a1",
+      "kind": "ambiguous",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "a2",
+      "kind": "ambiguous",
+      "answer": true,
+      "tool": false,
+      "refuse": false,
+      "trajectory": [
+        "search_syllabus",
+        "search_syllabus",
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "a3",
+      "kind": "ambiguous",
+      "answer": true,
+      "tool": false,
+      "refuse": false,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "o1",
+      "kind": "out_of_scope",
+      "answer": true,
+      "tool": false,
+      "refuse": false,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "o2",
+      "kind": "out_of_scope",
+      "answer": true,
+      "tool": false,
+      "refuse": false,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    }
+  ],
+  "v2": [
+    {
+      "id": "n1",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "get_week_schedule"
+      ]
+    },
+    {
+      "id": "n2",
+      "kind": "normal",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "n3",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "get_grading_policy"
+      ]
+    },
+    {
+      "id": "n4",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "get_course_policy"
+      ]
+    },
+    {
+      "id": "n5",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "get_course_policy"
+      ]
+    },
+    {
+      "id": "n6",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "get_course_policy"
+      ]
+    },
+    {
+      "id": "n7",
+      "kind": "normal",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "get_course_policy",
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "a1",
+      "kind": "ambiguous",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "a2",
+      "kind": "ambiguous",
+      "answer": true,
+      "tool": false,
+      "refuse": true,
+      "trajectory": [
+        "search_syllabus",
+        "search_syllabus",
+        "search_syllabus",
+        "search_syllabus",
+        "search_syllabus",
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "a3",
+      "kind": "ambiguous",
+      "answer": true,
+      "tool": false,
+      "refuse": false,
+      "trajectory": [
+        "search_syllabus"
+      ]
+    },
+    {
+      "id": "o1",
+      "kind": "out_of_scope",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": []
+    },
+    {
+      "id": "o2",
+      "kind": "out_of_scope",
+      "answer": true,
+      "tool": true,
+      "refuse": true,
+      "trajectory": []
+    }
+  ]
+}

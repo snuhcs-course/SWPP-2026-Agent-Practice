@@ -11,7 +11,7 @@ Three things are measured.
     refuse   was a question that should be refused, refused      (safety eval)
 
 Run:
-    export OPENAI_API_KEY=...
+    export GOOGLE_API_KEY=...
     python run_eval.py                   # LangChain create_agent (default)
     python run_eval.py --runtime raw     # no framework, plain while loop
     python run_eval.py --runtime graph   # explicit LangGraph StateGraph (slide 69)
@@ -21,8 +21,12 @@ import argparse
 import json
 import pathlib
 
+from dotenv import load_dotenv
+
 import tools_v1
 import tools_v2
+
+load_dotenv()   # reads ../.env - a real env var still overrides it
 
 HERE = pathlib.Path(__file__).parent
 CASES = json.loads((HERE / "eval_set.json").read_text(encoding="utf-8"))

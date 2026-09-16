@@ -11,23 +11,27 @@ Because here you can *see* and *constrain* the path:
   - the retry loop is a real edge with a real counter, not a hope
 
 Run:
-    pip install -U langchain langgraph langchain-openai
-    export OPENAI_API_KEY=...
+    pip install -U langchain langgraph langchain-google-genai
+    export GOOGLE_API_KEY=...
     python agent_graph.py "What do we cover in week 5?"
 """
 
 import sys
 from typing import Literal, Optional
 
+from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph, START, END
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
 
 import tools_v2 as T
 
-MODEL = "gpt-5-nano"
+load_dotenv()   # reads ../.env - a real env var still overrides it. Must run
+                 # before the module-level ChatGoogleGenerativeAI(...) calls below.
+
+MODEL = "gemini-3.5-flash"
 MAX_RETRIES = 2
 
 
@@ -70,7 +74,7 @@ classifier = ChatPromptTemplate.from_messages(
         ("system", "You route questions for the SWPP course Q&A bot. Classify only; never answer."),
         ("user", "{question}"),
     ]
-) | ChatOpenAI(model=MODEL).with_structured_output(QuestionType)
+) | ChatGoogleGenerativeAI(model=MODEL).with_structured_output(QuestionType)
 
 
 # ------------------------------------------------------------ Nodes
@@ -128,12 +132,15 @@ answerer = ChatPromptTemplate.from_messages(
          "Evidence:\n{evidence}"),
         ("user", "{question}"),
     ]
-) | ChatOpenAI(model=MODEL)
+) | ChatGoogleGenerativeAI(model=MODEL)
 
 
 def answer(state: State) -> dict:
     msg = answerer.invoke({"question": state["question"], "evidence": state["evidence"]})
-    return {"answer": msg.content}
+    # .text, not .content: Gemini's AIMessage.content is a list of content
+    # blocks, not a plain string. .text is the cross-provider str-subclass
+    # accessor LangChain 1.x added for exactly this difference.
+    return {"answer": msg.text}
 
 
 # --------------------------------------------------- Conditional edges

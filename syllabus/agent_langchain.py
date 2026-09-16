@@ -5,26 +5,29 @@ The point is that the tool definitions in tools_v2.py do not change by a single
 character - only the runtime around them does.
 
 Run:
-    pip install -U langchain langchain-openai
-    export OPENAI_API_KEY=...
+    pip install -U langchain langchain-google-genai
+    export GOOGLE_API_KEY=...
     python agent_langchain.py "What do we cover in week 5?"
 """
 
 import sys
 
+from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain.agents.middleware import ModelCallLimitMiddleware
 from langchain_core.messages import AIMessage
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 import tools_v2 as T   # swap in tools_v1 to compare
 
-MODEL = "gpt-5-nano"
+load_dotenv()   # reads ../.env - a real env var still overrides it
+
+MODEL = "gemini-3.5-flash"
 
 
 def build(tools=T):
     return create_agent(
-        model=ChatOpenAI(model=MODEL),
+        model=ChatGoogleGenerativeAI(model=MODEL),
         tools=tools.TOOLS,                 # plain Python functions, passed straight in
         system_prompt=tools.SYSTEM_PROMPT,
         # The equivalent of MAX_STEPS in agent_raw.py
@@ -47,7 +50,10 @@ def run(question: str, tools=T, verbose: bool = True) -> dict:
             print(f"  -> {name}")
 
     return {
-        "answer": result["messages"][-1].content,
+        # .text, not .content: Gemini's AIMessage.content is a list of content
+        # blocks, not a plain string. .text is the cross-provider str-subclass
+        # accessor LangChain 1.x added for exactly this difference.
+        "answer": result["messages"][-1].text,
         "trajectory": trajectory,
         "steps": len(trajectory),
     }

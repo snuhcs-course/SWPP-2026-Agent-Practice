@@ -4,27 +4,40 @@ Runs on the OpenAI SDK alone: no LangChain, no LangGraph.
 The heart of it is a 40-line while loop, and that is essentially what a framework
 does for you as well.
 
+GEMINI SWAP: this still runs on the `openai` package. Gemini exposes an
+OpenAI-compatible endpoint, so pointing the client's base_url at it is enough -
+the tool-calling loop below (msg.tool_calls, .function.name/.arguments) is
+untouched because Gemini's compat layer returns the same shape.
+See https://ai.google.dev/gemini-api/docs/openai for the endpoint reference.
+
 The ReAct cell in the Colab notebook parses "Thought:" / "Action:" out of the model's
 text. That was how you did it in 2022, before native tool calling existed. Use
 tool_calls, as below, and the parsing disappears - and so do the parsing bugs.
 
 Run:
     pip install openai
-    export OPENAI_API_KEY=...
+    export GOOGLE_API_KEY=...
     python agent_raw.py "What do we cover in week 5?"
 """
 
 import json
+import os
 import sys
 
+from dotenv import load_dotenv
 from openai import OpenAI
 
 import tools_v2 as T   # swap in tools_v1 to compare
 
-MODEL = "gpt-5-nano"
+load_dotenv()   # reads ../.env - a real env var still overrides it
+
+MODEL = "gemini-3.5-flash"
 MAX_STEPS = 6          # Without a cap, the loop will eventually spin. Not "might".
 
-client = OpenAI()
+client = OpenAI(
+    api_key=os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY"),
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+)
 
 
 def run(question: str, tools=T, verbose: bool = True) -> dict:

@@ -11,9 +11,13 @@ What changed from the 2025 version:
   - langchain_teddynote.messages           ->  app.stream(...)  (standard API)
   - Annotated[..., "description"] in a BaseModel -> Field(description=...)
 
+Everything here is given except build_app(). That's Exercise 1 (slide 55):
+wire the four nodes and the edges between them, including the conditional
+edge on "replan". See slides 55-57 in Tutorial 03. Agent Basics.
+
 Run:
-    pip install -U langchain langgraph langchain-openai langchain-tavily python-dotenv
-    # put OPENAI_API_KEY and TAVILY_API_KEY in .env
+    pip install -U langchain langgraph langchain-google-genai langchain-tavily python-dotenv
+    # put GOOGLE_API_KEY and TAVILY_API_KEY in .env
     python simple_react.py
 """
 
@@ -26,7 +30,7 @@ from pydantic import BaseModel, Field
 
 from langchain.agents import create_agent
 from langchain.agents.middleware import ModelCallLimitMiddleware
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableConfig
@@ -36,7 +40,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 load_dotenv()
 
-MODEL = "gpt-5-nano"
+MODEL = "gemini-3.5-flash"
 
 
 # ---------------------------------------------------------------- State
@@ -53,7 +57,7 @@ tools = [TavilySearch(max_results=3)]
 # create_agent takes the system prompt as a plain string.
 # Do not pass a ChatPromptTemplate the way the 2025 version did.
 agent_executor = create_agent(
-    model=ChatOpenAI(model=MODEL),
+    model=ChatGoogleGenerativeAI(model=MODEL),
     tools=tools,
     system_prompt="You are a helpful research assistant. Answer in English.",
     # A cap so tool calls cannot run away (no equivalent in the 2025 version)
@@ -84,7 +88,7 @@ class Plan(BaseModel):
     )
 
 
-planner = planner_prompt | ChatOpenAI(model=MODEL).with_structured_output(Plan)
+planner = planner_prompt | ChatGoogleGenerativeAI(model=MODEL).with_structured_output(Plan)
 
 
 # --------------------------------------------------------- Replanner
@@ -124,7 +128,7 @@ class Act(BaseModel):
     )
 
 
-replanner = replanner_prompt | ChatOpenAI(model=MODEL).with_structured_output(Act)
+replanner = replanner_prompt | ChatGoogleGenerativeAI(model=MODEL).with_structured_output(Act)
 
 
 # ------------------------------------------------------- Final report
@@ -144,7 +148,7 @@ Your previously done steps (question and answer pairs):
 Generate a final report in markdown format. Write your response in English."""
 )
 
-final_report = final_report_prompt | ChatOpenAI(model=MODEL) | StrOutputParser()
+final_report = final_report_prompt | ChatGoogleGenerativeAI(model=MODEL) | StrOutputParser()
 
 
 # ------------------------------------------------------------ Nodes
@@ -164,7 +168,10 @@ def execute_step(state: PlanExecute):
         f"You are tasked with executing [step 1. {task}]."
     )
     agent_response = agent_executor.invoke({"messages": [("user", task_formatted)]})
-    return {"past_steps": [(task, agent_response["messages"][-1].content)]}
+    # .text, not .content: Gemini's AIMessage.content is a list of content
+    # blocks, not a plain string. .text is the cross-provider str-subclass
+    # accessor LangChain 1.x added for exactly this difference.
+    return {"past_steps": [(task, agent_response["messages"][-1].text)]}
 
 
 def replan_step(state: PlanExecute):
@@ -198,24 +205,9 @@ def should_end(state: PlanExecute):
 
 # ------------------------------------------------------------ Graph
 def build_app():
-    workflow = StateGraph(PlanExecute)
-
-    workflow.add_node("planner", plan_step)
-    workflow.add_node("execute", execute_step)
-    workflow.add_node("replan", replan_step)
-    workflow.add_node("final_report", generate_report)
-
-    workflow.add_edge(START, "planner")
-    workflow.add_edge("planner", "execute")
-    workflow.add_edge("execute", "replan")
-    workflow.add_edge("final_report", END)
-
-    workflow.add_conditional_edges(
-        "replan",
-        should_end,
-        {"execute": "execute", "final_report": "final_report"},
-    )
-
+    # TODO: build `workflow` and return it compiled.
+    workflow = None
+    raise NotImplementedError("TODO: build_app() - see slide 55")
     return workflow.compile(checkpointer=InMemorySaver())
 
 

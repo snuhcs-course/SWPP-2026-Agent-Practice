@@ -24,7 +24,7 @@ def test_grading_sums_to_100():
 def test_week_schedule_returns_the_right_week():
     out = T.get_week_schedule(5)
     assert out["week"] == 5
-    assert "Agent" in out["topic"]
+    assert "Requirement" in out["topic"]
 
 
 def test_policy_lookup():
@@ -35,7 +35,7 @@ def test_policy_lookup():
 def test_search_finds_testing_week():
     hits = T.search_syllabus("Testing", section="schedule")
     assert isinstance(hits, list)
-    assert any(h["week"] == 6 for h in hits)
+    assert any(h["week"] == 8 for h in hits)
 
 
 # ------------------------------------------------- failure is a contract
