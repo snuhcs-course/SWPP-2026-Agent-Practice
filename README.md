@@ -1,4 +1,4 @@
-# SWPP 2026 Fall — Week 5 Agent Lab Code
+# SWPP 2026 Fall — Week 3 Agent Lab Code
 
 Two parts, one shared key file: put `GOOGLE_API_KEY` and `TAVILY_API_KEY` in a single
 `.env` at this repo's root (`agent-practice/.env`). Every script below loads it via
